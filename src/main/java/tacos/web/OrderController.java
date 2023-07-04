@@ -19,9 +19,9 @@ import tacos.data.OrderRepository;
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
 public class OrderController {
-	
+
 	private OrderRepository orderRepo;
-	
+
 	public OrderController(OrderRepository orderRepo) {
 		this.orderRepo = orderRepo;
 	}
@@ -37,7 +37,7 @@ public class OrderController {
 			return "orderForm";
 		}
 		orderRepo.save(order);
-		
+
 		log.info("Order submitted: {}", order);
 		sessionStatus.setComplete();
 
