@@ -21,7 +21,6 @@ import tacos.Ingredient;
 import tacos.Ingredient.Type;
 import tacos.Taco;
 import tacos.TacoOrder;
-import tacos.TacoUDT;
 import tacos.data.IngredientRepository;
 
 @Slf4j
@@ -69,7 +68,7 @@ public class DesignTacoController {
 		if (errors.hasErrors()) {
 			return "design";
 		}
-		tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
+		tacoOrder.addTaco(taco);
 		log.info("Processing taco: {}", taco);
 
 		return "redirect:/orders/current";
