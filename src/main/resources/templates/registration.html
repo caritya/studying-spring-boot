@@ -10,7 +10,7 @@
 		
 		<img th:src="@{/images/TacoCloud.png}"/>
 		
-		<form method="post" th:action="@{/register}" id="registerForm">
+		<form method="POST" th:action="@{/register}" id="registerForm">
 		
 			<label for="username">Username: </label>
 			<input type="text" name="username"/><br/>
@@ -41,6 +41,5 @@
 			
 			<input type="submit" value="Register"/>
 		</form>
-	
 	</body>
 </html>
