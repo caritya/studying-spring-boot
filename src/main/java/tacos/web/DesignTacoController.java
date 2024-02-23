@@ -1,5 +1,6 @@
 package tacos.web;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,10 @@ import tacos.Ingredient;
 import tacos.Ingredient.Type;
 import tacos.Taco;
 import tacos.TacoOrder;
+import tacos.User;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
+import tacos.data.UserRepository;
 
 @Slf4j
 @Controller
@@ -30,10 +34,18 @@ import tacos.data.IngredientRepository;
 public class DesignTacoController {
 
 	private final IngredientRepository ingredientRepo;
+	
+	private TacoRepository tacoRepo;
+	
+	private UserRepository userRepo;
 
 	@Autowired
-	public DesignTacoController(IngredientRepository ingredientRepo) {
+	public DesignTacoController(IngredientRepository ingredientRepo,
+			TacoRepository tacoRepo,
+			UserRepository userRepo) {
 		this.ingredientRepo = ingredientRepo;
+		this.tacoRepo = tacoRepo;
+		this.userRepo = userRepo;
 	}
 
 	@ModelAttribute
@@ -57,6 +69,13 @@ public class DesignTacoController {
 	public Taco taco() {
 		return new Taco();
 	}
+	
+	@ModelAttribute(name = "user")
+	public User user(Principal principal) {
+		String username = principal.getName();
+		User user = userRepo.findByUsername(username);
+		return user;
+	}
 
 	@GetMapping
 	public String showDesignForm() {
@@ -64,10 +83,15 @@ public class DesignTacoController {
 	}
 
 	@PostMapping
-	public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
+	public String processTaco(
+			@Valid Taco taco, Errors errors, 
+			@ModelAttribute TacoOrder tacoOrder) {
 		if (errors.hasErrors()) {
 			return "design";
 		}
+		//saving taco in TacoRepository
+		tacoRepo.save(taco);
+		//adding taco in current order
 		tacoOrder.addTaco(taco);
 		log.info("Processing taco: {}", taco);
 

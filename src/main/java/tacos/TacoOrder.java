@@ -10,8 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
+import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -23,6 +24,8 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name="Taco_Order")//добавлено для создания таблицы в БД
+//TODO надо удалить такую таблицу из файла schema.sql и, возможно, вообще от него избавиться
 public class TacoOrder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -32,6 +35,9 @@ public class TacoOrder implements Serializable {
 	private Long id;
 	
 	private Date placedAt = new Date();
+	
+	@ManyToOne
+	private User user;
 
 	@NotBlank(message = "Delivery name is required")
 	private String deliveryName;
@@ -58,7 +64,8 @@ public class TacoOrder implements Serializable {
 	@Digits(integer=3, fraction=0, message="Invalid CVV")
 	private String ccCVV;
 
-	@OneToMany(cascade = CascadeType.ALL)
+//	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.MERGE)
 	private List<Taco> tacos = new ArrayList<>();
 
 	public void addTaco(Taco taco) {
