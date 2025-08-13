@@ -10,16 +10,23 @@
 		
 		<img th:src="@{/images/TacoCloud.png}"/>
 		
-		<form method="POST" th:action="@{/register}" id="registerForm">
+		<form method="POST" th:object="${userForm}" th:action="@{/register}" id="registerForm">
 		
 			<label for="username">Username: </label>
-			<input type="text" name="username"/><br/>
+ <!--  			<input type="text" name="username"/><br/>-->
+			<input type="text" th:field="*{username}" />	
+			<span class="validationError"
+            th:if="${#fields.hasErrors('username')}"
+            th:errors="*{username}">usernameError</span>
+		<br/>
 			
 			<label for="password">Password: </label>
-			<input type="password" name="password"/><br/>
+			<input type="password" name="password"/><br/> 
+ 		
 			
 			<label for="confirm">Confirm password: </label>
-			<input type="password" name="confirm"/><br/>
+  			<input type="password" name="confirm"/><br/>
+			
 			
 			<label for="fullname">Full name: </label>
 			 <input type="text" name="fullname"/><br/>
